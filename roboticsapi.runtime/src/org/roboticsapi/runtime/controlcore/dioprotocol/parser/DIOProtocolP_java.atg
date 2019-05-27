@@ -1,0 +1,76 @@
+import org.roboticsapi.rpi.softrobot.dioprotocol.*;
+
+COMPILER DIOProtocolP
+
+public DIOStatement diostatement;
+
+CHARACTERS
+  nondigit =  'A'..'Z' + 'a'..'z' + "_". 
+  character = nondigit + "0123456789".
+  regularStringChar = ANY - '"' - '\\'.
+  digit = "0123456789".
+
+TOKENS
+  string = '"' { regularStringChar | "\\\\" | "\\\"" } '"'.
+  identifier = nondigit { character }.
+  integer = digit { digit }.
+  float = { digit } "." digit { digit }.
+
+PRODUCTIONS
+
+DIOStringP <. out DIOLiteral lit .>
+	= string												(. lit = new DIOString(t.val, true); .)
+	.
+	
+DIOIntegerP <. out DIOLiteral lit .>
+	= integer												(. lit = new DIOInteger(t.val); .)
+	.
+	
+DIOFloatP <. out DIOLiteral lit .>
+	= float													(. lit = new DIOFloat(t.val); .)
+	.
+
+DIOLiteralP <. out DIOLiteral lit .>						(. lit = null; .)
+	= DIOStringP <out lit>
+	| DIOIntegerP <out lit>
+	| DIOFloatP <out lit>
+	.
+
+DIOMapP <. DIOParameterMap pmap .>							(. String key = ""; .)
+	= (identifier											(. key = t.val; .)
+	| string												(. key = DIOString.unescape(t.val); .)
+	)
+	":" DIOParameterP <out DIOParameter param>				(. pmap.addParameter(key, param); .)
+	.
+
+DIOParameterP <. out DIOParameter param .>					(. param = null; .)
+	= (DIOLiteralP <out DIOLiteral lit>						(. param = lit; .)
+	| "["													(. DIOParameterList paramlist = new DIOParameterList(); param = paramlist;.) 
+	[ DIOParameterP <out DIOParameter nparam>				(. paramlist.addParameter(nparam); .)
+		{ "," DIOParameterP <out DIOParameter nparam2>		(. paramlist.addParameter(nparam2); .)
+	} ] "]" 
+	| "{" 													(. DIOParameterMap pmap = new DIOParameterMap(); param = pmap;.)
+		[ DIOMapP <pmap>									
+		{ "," DIOMapP <pmap>
+	} ] "}"
+	).
+
+DIOParametersP <. DIOCommand dioc .>	
+	= [ DIOParameterP <out DIOParameter diop>				(. dioc.addParameter(diop); .) 
+	{"," DIOParameterP <out DIOParameter diop2>				(. dioc.addParameter(diop2); .)
+	}]
+	.
+
+DIOCommandP <. DIOStatement dios .>
+	= identifier											(. dios.setTag(t.val); .)
+	"="
+	identifier												(. DIOCommand cmd = new DIOCommand(t.val); .)
+	"("
+	DIOParametersP <cmd>
+	")"														(. dios.setCommand(cmd); .)
+	.
+
+DIOProtocolP												(. diostatement = new DIOStatement(); .) 
+	= DIOCommandP <diostatement>.
+
+END DIOProtocolP.

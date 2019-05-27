@@ -1,0 +1,4 @@
+image: maven:3.6.0-jdk-11
+
+maven_build:
+  script: mvn verify

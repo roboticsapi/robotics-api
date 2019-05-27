@@ -1,0 +1,8 @@
+org.roboticsapi.activity.extension.ActivityExtension
+org.roboticsapi.tool.extension.ToolExtension
+org.roboticsapi.world.extension.FrameBuilder
+org.roboticsapi.cartesianmotion.extension.CartesianMotionExtension
+org.roboticsapi.multijoint.extension.MultiJointDeviceExtension
+org.roboticsapi.io.extension.IOActivityExtension
+org.roboticsapi.platform.extension.PlatformExtension
+org.roboticsapi.robot.extension.RobotExtension
