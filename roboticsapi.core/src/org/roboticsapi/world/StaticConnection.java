@@ -263,6 +263,21 @@ public class StaticConnection extends Connection {
 		return z;
 	}
 
+	@ConfigurationProperty(Optional = true)
+	public void setADeg(double aDeg) {
+		this.setA(Math.toRadians(aDeg));
+	}
+
+	@ConfigurationProperty(Optional = true)
+	public void setBDeg(double bDeg) {
+		this.setB(Math.toRadians(bDeg));
+	}
+
+	@ConfigurationProperty(Optional = true)
+	public void setCDeg(double cDeg) {
+		this.setC(Math.toRadians(cDeg));
+	}
+
 	@Override
 	protected void validateConfigurationProperties() throws ConfigurationException {
 		super.validateConfigurationProperties();
