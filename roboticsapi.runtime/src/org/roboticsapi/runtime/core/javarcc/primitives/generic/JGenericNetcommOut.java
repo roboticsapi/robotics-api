@@ -43,7 +43,7 @@ public class JGenericNetcommOut<T extends Type> extends JPrimitive {
 
 	@Override
 	public synchronized void updateData() {
-		data.update(inValue.get(propValue), getNet().getTime());
+		data.update(inValue.get(), getNet().getTime());
 	}
 
 	public void writeActuator() {

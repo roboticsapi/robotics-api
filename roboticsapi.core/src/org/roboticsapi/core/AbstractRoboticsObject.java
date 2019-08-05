@@ -105,7 +105,7 @@ public abstract class AbstractRoboticsObject implements RoboticsObject {
 
 		for (Map.Entry<String, RoboticsObject> object : automaticObjects.entrySet()) {
 			try {
-				if (object.getValue() != null) {
+				if (object.getValue() != null && !object.getValue().isInitialized()) {
 					context.initialize(object.getValue());
 				}
 			} catch (InitializationException e) {

@@ -201,6 +201,7 @@ public class CoreExtension extends JavaRCCExtension {
 		ep.registerPrimitive("Core::Lerp", JLerp.class);
 		ep.registerPrimitive("Core::Rampify", JRampify.class);
 		ep.registerPrimitive("Core::OTG", JOTG.class);
+		ep.registerPrimitive("Core::OTG2", JOTG2.class);
 		ep.registerPrimitive("Core::TimeDiff", JTimeDiff.class);
 		ep.registerPrimitive("Core::TimeNet", JTimeNet.class);
 		ep.registerPrimitive("Core::TimeWall", JTimeWall.class);

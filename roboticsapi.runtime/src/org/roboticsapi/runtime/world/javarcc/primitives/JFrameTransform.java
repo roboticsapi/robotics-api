@@ -26,7 +26,6 @@ public class JFrameTransform extends JPrimitive {
 
 	@Override
 	public void checkParameters() throws IllegalArgumentException {
-		connected(inFirst, inSecond);
 	}
 
 	@Override

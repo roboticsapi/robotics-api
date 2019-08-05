@@ -13,6 +13,7 @@
 
 	<build>
 		<sourceDirectory>${project.basedir}/src</sourceDirectory>
+		<testSourceDirectory>${project.basedir}/test</testSourceDirectory>
 		<resources><resource><directory>${project.basedir}/resources</directory></resource></resources>
 		
 		<plugins>
@@ -47,6 +48,15 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 	<modules>
 		<module>roboticsapi.core</module>

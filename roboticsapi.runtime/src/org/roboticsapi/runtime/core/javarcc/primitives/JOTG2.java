@@ -25,8 +25,8 @@ public class JOTG2 extends JPrimitive {
 	JOutPort<RPIdouble> outVel = add("outVel", new JOutPort<RPIdouble>());
 	JOutPort<RPIdouble> outAcc = add("outAcc", new JOutPort<RPIdouble>());
 
-	JParameter<RPIdouble> propMaxVel = add("MaxVel", new JParameter<RPIdouble>());
-	JParameter<RPIdouble> propMaxAcc = add("MaxAcc", new JParameter<RPIdouble>());
+	JParameter<RPIdouble> propMaxVel = add("maxVel", new JParameter<RPIdouble>());
+	JParameter<RPIdouble> propMaxAcc = add("maxAcc", new JParameter<RPIdouble>());
 
 	double curPos = 0, curVel = 0;
 	double desPos = 0, desVel = 0;
