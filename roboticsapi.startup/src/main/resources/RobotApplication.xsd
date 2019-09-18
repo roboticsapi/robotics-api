@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://schema.roboticsapi.org/RobotApplication.xsd"
+	elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://schema.roboticsapi.org/RobotApplication.xsd">
+
+	<xsd:element name="RobotApplication" type="RobotApplication"></xsd:element>
+
+	<xsd:simpleType name="JavaClass">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([a-z][a-z0-9]*\.)+[a-zA-Z][a-zA-Z0-9]*"></xsd:pattern>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="ParameterName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[a-zA-Z0-9]+(\[[0-9]+\])?"></xsd:pattern>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="RobotApplication">
+		<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+			<xsd:choice>
+				<xsd:element name="Object" type="Object"></xsd:element>
+				<xsd:element name="Include" type="Include"></xsd:element>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ParameterObject">
+		<xsd:group ref="Parameter" maxOccurs="unbounded" minOccurs="0"></xsd:group>
+		<xsd:attribute name="name" type="ParameterName" use="required"></xsd:attribute>
+		<xsd:attribute name="type" type="JavaClass" use="required"></xsd:attribute>
+		<xsd:attribute name="id" type="xsd:ID" use="optional"></xsd:attribute>
+		<xsd:attribute name="parameter" type="ParameterName"
+			use="optional"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="ParameterReference">
+		<xsd:attribute name="name" type="ParameterName" use="required"></xsd:attribute>
+		<xsd:attribute name="ref" type="xsd:IDREF" use="required"></xsd:attribute>
+		<xsd:attribute name="parameter" type="ParameterName"
+			use="optional"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="ParameterValue">
+		<xsd:attribute name="name" type="ParameterName" use="required"></xsd:attribute>
+		<xsd:attribute name="value" type="xsd:string" use="required"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="Object">
+		<xsd:group ref="Parameter" maxOccurs="unbounded" minOccurs="0"></xsd:group>
+		<xsd:attribute name="type" type="JavaClass" use="required"></xsd:attribute>
+		<xsd:attribute name="id" type="xsd:ID" use="optional"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="Include">
+		<xsd:attribute name="src" type="xsd:string" use="required"></xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:group name="Parameter">
+		<xsd:choice>
+			<xsd:element name="ParameterValue" type="ParameterValue" />
+			<xsd:element name="ParameterReference" type="ParameterReference" />
+			<xsd:element name="ParameterObject" type="ParameterObject" />
+		</xsd:choice>
+	</xsd:group>
+
+</xsd:schema>

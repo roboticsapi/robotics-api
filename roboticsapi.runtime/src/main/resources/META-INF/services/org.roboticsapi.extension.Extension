@@ -1,0 +1,3 @@
+org.roboticsapi.feature.runtime.javarcc.extension.JavaRccExtension
+org.roboticsapi.feature.runtime.realtimercc.extension.RealtimeRccExtension
+org.roboticsapi.feature.runtime.netoptimizer.extension.NetOptimizerExtension
