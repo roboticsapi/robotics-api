@@ -7,12 +7,13 @@
 
 package org.roboticsapi.feature.visualization;
 
+import java.rmi.Remote;
 import java.util.Map;
 
 /**
  * A remotely available and editable 3D scene.
  */
-public interface VisualizationClientScene {
+public interface VisualizationClientScene extends Remote {
 
 	/**
 	 * Returns the scene's name.
