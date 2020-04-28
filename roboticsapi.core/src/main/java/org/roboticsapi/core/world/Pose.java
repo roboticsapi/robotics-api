@@ -221,9 +221,8 @@ public class Pose {
 	 * @param b rotation around y-axis of this Pose
 	 * @param c rotation around x-axis of this Pose
 	 * @return the newly constructed Pose
-	 * @throws TransformationException
 	 */
-	public final Pose plus(double x, double y, double z, double a, double b, double c) throws TransformationException {
+	public final Pose plus(double x, double y, double z, double a, double b, double c) {
 		return plus(new Vector(x, y, z), new Rotation(a, b, c));
 	}
 
@@ -235,10 +234,9 @@ public class Pose {
 	 * @param y translation along y-axis of this Pose
 	 * @param z translation along z-axis of this Pose
 	 * @return the newly constructed Pose
-	 * @throws TransformationException
 	 *
 	 */
-	public final Pose plus(double x, double y, double z) throws TransformationException {
+	public final Pose plus(double x, double y, double z) {
 		return plus(x, y, z, 0, 0, 0);
 	}
 
@@ -248,9 +246,8 @@ public class Pose {
 	 *
 	 * @param translation the translation vector
 	 * @return the newly constructed Pose
-	 * @throws TransformationException
 	 */
-	public final Pose plus(Vector translation) throws TransformationException {
+	public final Pose plus(Vector translation) {
 		return plus(translation, Rotation.IDENTITY);
 	}
 
@@ -260,9 +257,8 @@ public class Pose {
 	 *
 	 * @param rotation the Rotation
 	 * @return the newly constructed Frame
-	 * @throws TransformationException
 	 */
-	public final Pose plus(Rotation rotation) throws TransformationException {
+	public final Pose plus(Rotation rotation) {
 		return plus(Vector.getNullVector(), rotation);
 	}
 
@@ -273,9 +269,8 @@ public class Pose {
 	 * @param translation the translation vector
 	 * @param rotation    the rotation
 	 * @return the newly constructed Pose
-	 * @throws TransformationException
 	 */
-	public final Pose plus(Vector translation, Rotation rotation) throws TransformationException {
+	public final Pose plus(Vector translation, Rotation rotation) {
 		return plus(new Transformation(rotation, translation));
 	}
 
