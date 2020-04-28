@@ -82,4 +82,7 @@ public interface RmiVisualizationClientScene extends VisualizationClientScene, R
 	@Override
 	void setScale(int id, double sx, double sy, double sz) throws RemoteException;
 
+	@Override
+	int getRootFrame() throws Exception;
+
 }
