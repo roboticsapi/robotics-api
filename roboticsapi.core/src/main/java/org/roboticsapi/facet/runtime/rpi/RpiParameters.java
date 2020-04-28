@@ -15,14 +15,14 @@ public class RpiParameters {
 	private final Map<String, String> innerMap = new HashMap<String, String>();
 
 	public String get(String key) {
-		return innerMap.get(key);
+		String value = innerMap.get(key);
+		if (value == null)
+			throw new IllegalArgumentException("RpiParameter '" + key + "' is not provided.");
+		return value;
 	}
 
 	public <T extends Type> T get(Class<T> type, String key) {
 		try {
-			if (get(key) == null) {
-				return null;
-			}
 			return type.getConstructor(String.class).newInstance(get(key));
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);

@@ -98,18 +98,20 @@ public class MultiJointDeviceGenericDriver<D extends MultiJointDevice> extends A
 		List<? extends Joint> joints = getDevice().getJoints();
 		RPIdoubleArray minJoint = new RPIdoubleArray(joints.size());
 		RPIdoubleArray maxJoint = new RPIdoubleArray(joints.size());
+		RPIdoubleArray homeJoint = new RPIdoubleArray(joints.size());
 		RPIdoubleArray maxVel = new RPIdoubleArray(joints.size());
 		RPIdoubleArray maxAcc = new RPIdoubleArray(joints.size());
 
 		for (int i = 0; i < joints.size(); i++) {
 			minJoint.set(i, new RPIdouble(joints.get(i).getMinimumPosition()));
 			maxJoint.set(i, new RPIdouble(joints.get(i).getMaximumPosition()));
+			homeJoint.set(i, new RPIdouble(joints.get(i).getHomePosition()));
 			maxVel.set(i, new RPIdouble(joints.get(i).getMaximumVelocity()));
 			maxAcc.set(i, new RPIdouble(joints.get(i).getMaximumAcceleration()));
 		}
 
 		return super.getRpiDeviceParameters().with("min_joint", minJoint).with("max_joint", maxJoint)
-				.with("max_vel", maxVel).with("max_acc", maxAcc);
+				.with("home_joint", homeJoint).with("max_vel", maxVel).with("max_acc", maxAcc);
 	}
 
 	@Override

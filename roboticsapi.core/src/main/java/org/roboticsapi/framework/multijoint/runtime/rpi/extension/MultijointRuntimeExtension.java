@@ -26,6 +26,7 @@ import org.roboticsapi.framework.multijoint.action.SwitchJointController;
 import org.roboticsapi.framework.multijoint.runtime.rpi.JointGenericDriver;
 import org.roboticsapi.framework.multijoint.runtime.rpi.JointSensorInterfaceImpl;
 import org.roboticsapi.framework.multijoint.runtime.rpi.MultiJointDeviceGenericDriver;
+import org.roboticsapi.framework.multijoint.runtime.rpi.MultiJointDeviceMockDriver;
 import org.roboticsapi.framework.multijoint.runtime.rpi.mapper.ExecutableJointMotionMapper;
 import org.roboticsapi.framework.multijoint.runtime.rpi.mapper.FollowJointGoalMapper;
 import org.roboticsapi.framework.multijoint.runtime.rpi.mapper.FollowJointVelocityMapper;
@@ -55,7 +56,7 @@ import org.roboticsapi.framework.multijoint.runtime.rpi.result.MultiJointActionR
 public final class MultijointRuntimeExtension extends RpiExtension {
 
 	public MultijointRuntimeExtension() {
-		super(JointGenericDriver.class, MultiJointDeviceGenericDriver.class);
+		super(JointGenericDriver.class, MultiJointDeviceGenericDriver.class, MultiJointDeviceMockDriver.class);
 	}
 
 	@Override
