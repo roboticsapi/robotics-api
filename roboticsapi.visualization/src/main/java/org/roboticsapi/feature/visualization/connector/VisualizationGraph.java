@@ -116,6 +116,7 @@ public class VisualizationGraph implements RoboticsObjectListener {
 				return;
 			r.run();
 		} catch (Exception e) {
+			RAPILogger.logException(this.getClass(), e);
 			failed = true;
 		}
 	}
