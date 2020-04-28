@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -43,7 +44,13 @@ public class SimpleResult extends ActivityResult {
 		devices.addAll(getDevices());
 		devices.addAll(other.getDevices());
 		metadata.putAll(this.getMetadata());
-		metadata.putAll(other.getMetadata());
+		for (Entry<Device, Map<Class<? extends ActivityProperty>, ActivityProperty>> data : other.getMetadata()
+				.entrySet()) {
+			if (metadata.containsKey(data.getKey()))
+				throw new IllegalArgumentException(
+						"Cannot combine two ActivityResults with metadata for the same device.");
+			metadata.put(data.getKey(), data.getValue());
+		}
 		metadataProviders.addAll(this.getMetadataProviders());
 		metadataProviders.addAll(other.getMetadataProviders());
 		SimpleResult ret = new SimpleResult(getName() + " + " + other.getName(), devices,
@@ -66,6 +73,26 @@ public class SimpleResult extends ActivityResult {
 		return ret;
 	}
 
+	@Override
+	public ActivityResult withMetadataFor(Set<Device> devices) {
+		List<ActivityPropertyProvider<?>> metadataProviders = new ArrayList<>();
+		Map<Device, Map<Class<? extends ActivityProperty>, ActivityProperty>> metadata = new HashMap<>();
+		for (Device device : devices) {
+			metadata.put(device, getMetadata().get(device));
+		}
+		for(ActivityPropertyProvider<?> provider: getMetadataProviders()) {
+			for(Device device: devices) {
+				if(provider.getSupportedDevices().contains(device)) {
+					metadataProviders.add(provider);
+					break;
+				}
+			}
+		}
+
+		
+		return new SimpleResult(getName(), getDevices(), isCompletedWhenActive(), isFailedWhenActive(), allowsFreshStartWhenActive(), metadataProviders, metadata);
+	}
+	
 	@Override
 	protected void updateStatus(Status status) {
 		super.updateStatus(status);

@@ -26,6 +26,8 @@ public abstract class ActivityResult {
 
 	public abstract ActivityResult and(ActivityResult other);
 
+	public abstract ActivityResult withMetadataFor(Set<Device> devices);
+
 	private Status status = Status.POSSIBLE;
 	private final Set<Device> devices = new HashSet<>();
 	private final Map<Device, Map<Class<? extends ActivityProperty>, ActivityProperty>> metadata = new HashMap<>();
@@ -85,7 +87,7 @@ public abstract class ActivityResult {
 			// otherwise, search for a meta data provider that can provide this
 			// type of meta data
 			for (ActivityPropertyProvider<?> provider : metadataProviders) {
-				if (provider.getProvidedType().equals(property)) {
+				if (provider.getProvidedType().equals(property) && provider.getSupportedDevices().contains(device)) {
 					// collect types of all dependencies, and (recursively) get
 					// these meta data
 					Map<Class<? extends ActivityProperty>, ActivityProperty> deps = new HashMap<Class<? extends ActivityProperty>, ActivityProperty>();

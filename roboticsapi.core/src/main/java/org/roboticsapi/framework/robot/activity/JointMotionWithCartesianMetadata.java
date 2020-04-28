@@ -8,6 +8,7 @@
 package org.roboticsapi.framework.robot.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,11 @@ import org.roboticsapi.framework.robot.RobotArm;
 
 public class JointMotionWithCartesianMetadata<T extends ActuatorInterface> extends ModifiedActuatorInterface<T> {
 
-	private static final ActivityPropertyProvider<GoalPoseProperty> JOINT_GOAL_2_CARTESIAN_GOALPOSE = new ActivityPropertyProvider<GoalPoseProperty>() {
+	private final ActivityPropertyProvider<GoalPoseProperty> JOINT_GOAL_2_CARTESIAN_GOALPOSE = new ActivityPropertyProvider<GoalPoseProperty>() {
+
+		public java.util.List<Device> getSupportedDevices() {
+			return Arrays.asList(instance.getDevice());
+		}
 
 		@Override
 		public Class<GoalPoseProperty> getProvidedType() {
@@ -60,7 +65,12 @@ public class JointMotionWithCartesianMetadata<T extends ActuatorInterface> exten
 		}
 	};
 
-	private static final ActivityPropertyProvider<CommandedPoseProperty> JOINT_COMMANDEDPOSITION_2_CARTESIAN_COMMANDEDPOSE = new ActivityPropertyProvider<CommandedPoseProperty>() {
+	private final ActivityPropertyProvider<CommandedPoseProperty> JOINT_COMMANDEDPOSITION_2_CARTESIAN_COMMANDEDPOSE = new ActivityPropertyProvider<CommandedPoseProperty>() {
+
+		public java.util.List<Device> getSupportedDevices() {
+			return Arrays.asList(instance.getDevice());
+		}
+
 		@Override
 		public Class<CommandedPoseProperty> getProvidedType() {
 			return CommandedPoseProperty.class;
@@ -92,7 +102,12 @@ public class JointMotionWithCartesianMetadata<T extends ActuatorInterface> exten
 		}
 	};
 
-	private static final ActivityPropertyProvider<CommandedVelocityProperty> JOINT_COMMANDEDVELOCITY_2_CARTESIAN_COMMANDEDVELOCITY = new ActivityPropertyProvider<CommandedVelocityProperty>() {
+	private final ActivityPropertyProvider<CommandedVelocityProperty> JOINT_COMMANDEDVELOCITY_2_CARTESIAN_COMMANDEDVELOCITY = new ActivityPropertyProvider<CommandedVelocityProperty>() {
+
+		public java.util.List<Device> getSupportedDevices() {
+			return Arrays.asList(instance.getDevice());
+		}
+
 		@Override
 		public Class<CommandedVelocityProperty> getProvidedType() {
 			return CommandedVelocityProperty.class;
@@ -127,7 +142,7 @@ public class JointMotionWithCartesianMetadata<T extends ActuatorInterface> exten
 
 	};
 
-	public static void addProviders(Activity a) {
+	public void addProviders(Activity a) {
 		a.addPropertyProvider(JOINT_COMMANDEDPOSITION_2_CARTESIAN_COMMANDEDPOSE);
 		a.addPropertyProvider(JOINT_COMMANDEDVELOCITY_2_CARTESIAN_COMMANDEDVELOCITY);
 		a.addPropertyProvider(JOINT_GOAL_2_CARTESIAN_GOALPOSE);
