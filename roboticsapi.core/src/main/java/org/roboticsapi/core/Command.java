@@ -445,11 +445,7 @@ public abstract class Command {
 	 * @return the CommandHandle for this Command
 	 * @throws RoboticsException if loading failed
 	 */
-	public CommandHandle load() throws RoboticsException {
-		// return handle if already loaded
-		if (loadCount == -1)
-			throw new IllegalStateException("The command has already been unloaded.");
-
+	public synchronized CommandHandle load() throws RoboticsException {
 		loadCount++;
 		if (getCommandHandle() != null) {
 			return getCommandHandle();
@@ -960,12 +956,12 @@ public abstract class Command {
 		return commandExecutionTime;
 	}
 
-	public void unload() throws CommandException {
+	public synchronized void unload() throws CommandException {
 		if (loadCount > 0) {
 			loadCount--;
 			if (loadCount == 0) {
 				commandHandle.unload();
-				loadCount = -1;
+				commandHandle = null;
 			}
 		}
 	}

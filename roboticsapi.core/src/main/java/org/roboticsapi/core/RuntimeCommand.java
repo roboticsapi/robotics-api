@@ -174,11 +174,6 @@ public abstract class RuntimeCommand extends Command {
 
 	@Override
 	public CommandHandle load() throws RoboticsException {
-		// return handle if already loaded
-		if (getCommandHandle() != null) {
-			return getCommandHandle();
-		}
-
 		if (!getRuntime().isPresent()) {
 			throw new RoboticsException(
 					"The runtime '" + getRuntime() + "' is not present (" + getRuntime().getState() + ")");
