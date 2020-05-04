@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.roboticsapi.core.Command;
 import org.roboticsapi.core.CommandException;
@@ -18,6 +19,7 @@ import org.roboticsapi.core.CommandHandle;
 import org.roboticsapi.core.CommandHandleOperation;
 import org.roboticsapi.core.CommandResult;
 import org.roboticsapi.core.CommandSchedule.CommandScheduleStatus;
+import org.roboticsapi.core.Device;
 import org.roboticsapi.core.RoboticsRuntime;
 import org.roboticsapi.core.activity.ActivityHandle;
 import org.roboticsapi.core.activity.ActivityResult;
@@ -97,11 +99,11 @@ public class RuntimeSchedule extends ActivitySchedule {
 				if (status == CommandScheduleStatus.STARTED) {
 					markTaken();
 					result.updateStatus(ActivityResult.Status.ACTIVE);
-					
+
 					for (CommandResult cr : result.getCommandResults()) {
 						try {
 							cr.getCommand().unload();
-						} catch(CommandException e) {
+						} catch (CommandException e) {
 							// ignore
 						}
 					}
@@ -142,8 +144,19 @@ public class RuntimeSchedule extends ActivitySchedule {
 		}
 
 		RuntimeSchedule other = (RuntimeSchedule) otherSchedule;
-		ActivityResult result = getResult().and(other.getResult());
-		ActivityResults results = getResults().cross(other.getResults());
+
+		Set<Device> thisDevices = getActivityHandle().getActivity().getDevices();
+		Set<Device> otherDevices = other.getActivityHandle().getActivity().getDevices();
+		for (Device device : thisDevices)
+			if (otherDevices.contains(device))
+				throw new IllegalArgumentException(
+						"Cannot combine schedules with devices " + thisDevices + ", " + otherDevices);
+
+		ActivityResult result = getResult().withMetadataFor(thisDevices)
+				.and(other.getResult().withMetadataFor(otherDevices));
+		ActivityResults results = getResults().withMetadataFor(thisDevices)
+				.cross(other.getResults().withMetadataFor(otherDevices));
+
 		List<Command> startCommands = new ArrayList<>();
 		startCommands.addAll(this.startCommands);
 		startCommands.addAll(other.startCommands);

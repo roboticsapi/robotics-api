@@ -31,7 +31,7 @@ public class RobotPtpInterfaceImpl extends ActuatorInterfaceImpl implements Robo
 	}
 
 	private void addPropertyProviders(PlannedActivity activity) {
-		JointMotionWithCartesianMetadata.addProviders(activity);
+		new JointMotionWithCartesianMetadata<>(this).addProviders(activity);
 	}
 
 	@Override

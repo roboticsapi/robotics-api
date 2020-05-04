@@ -9,8 +9,10 @@ package org.roboticsapi.core.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
+import org.roboticsapi.core.Device;
 import org.roboticsapi.core.exception.RoboticsException;
 
 public class ActivityResultContainer implements ActivityResults {
@@ -110,6 +112,13 @@ public class ActivityResultContainer implements ActivityResults {
 			if (r != result)
 				ret.addResult(r);
 		});
+		return ret;
+	}
+
+	@Override
+	public ActivityResults withMetadataFor(Set<Device> devices) {
+		ActivityResultContainer ret = new ActivityResultContainer();
+		this.provide(r -> ret.addResult(r.withMetadataFor(devices)));
 		return ret;
 	}
 

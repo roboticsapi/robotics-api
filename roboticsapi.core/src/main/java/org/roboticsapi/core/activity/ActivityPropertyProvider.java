@@ -41,4 +41,9 @@ public interface ActivityPropertyProvider<T extends ActivityProperty> {
 	 * @return the created {@link ActivityProperty}
 	 */
 	T provideProperty(Device device, Map<Class<? extends ActivityProperty>, ActivityProperty> properties);
+
+	/**
+	 * Provides the list of {@link Device}s supported by this provider
+	 */
+	List<Device> getSupportedDevices();
 }

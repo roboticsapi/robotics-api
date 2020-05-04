@@ -7,6 +7,9 @@
 
 package org.roboticsapi.core.activity.simple;
 
+import java.util.Set;
+
+import org.roboticsapi.core.Device;
 import org.roboticsapi.core.activity.ActivityHandle;
 import org.roboticsapi.core.activity.ActivityResult;
 import org.roboticsapi.core.activity.ActivityResults;
@@ -55,10 +58,19 @@ public class SimpleSchedule extends ActivitySchedule {
 			throw new IllegalArgumentException();
 		}
 		SimpleSchedule other = (SimpleSchedule) otherSchedule;
-		ActivityResult myResult = getResult().and(other.getResult());
-		ActivityResults myResults = getResults().cross(other.getResults());
+		Set<Device> thisDevices = getActivityHandle().getActivity().getDevices();
+		Set<Device> otherDevices = other.getActivityHandle().getActivity().getDevices();
+		for (Device device : thisDevices)
+			if (otherDevices.contains(device))
+				throw new IllegalArgumentException(
+						"Cannot combine schedules with devices " + thisDevices + ", " + otherDevices);
 
-		SimpleSchedule ret = new SimpleSchedule(myResult, composite, myResults, () -> {
+		ActivityResult result = getResult().withMetadataFor(thisDevices)
+				.and(other.getResult().withMetadataFor(otherDevices));
+		ActivityResults results = getResults().withMetadataFor(thisDevices)
+				.cross(other.getResults().withMetadataFor(otherDevices));
+
+		SimpleSchedule ret = new SimpleSchedule(result, composite, results, () -> {
 			new Thread(SimpleSchedule.this.getTask()).start();
 			new Thread(other.getTask()).start();
 		});

@@ -36,7 +36,7 @@ public abstract class AbstractActivity implements Activity {
 	private final List<Class<? extends CommandRealtimeException>> ignoredErrors = new ArrayList<>();
 
 	/** The property providers */
-	private final List<ActivityPropertyProvider<?>> propertyProviders = new ArrayList<ActivityPropertyProvider<?>>();
+	private final List<ActivityPropertyProvider<?>> propertyProviders = new ArrayList<>();
 
 	/*
 	 * (non-Javadoc)
@@ -68,15 +68,19 @@ public abstract class AbstractActivity implements Activity {
 
 	private ActivityHandle beginExecute(StackTraceElement[] errorStack) throws RoboticsException {
 		ActivityResults results = null;
-		Set<ActivityResults> seenResults = new HashSet<>();
+		Map<ActivityResults, Set<Device>> devicesForResults = new HashMap<>();
 		for (Device device : getDevices()) {
 			ActivityResults deviceResults = ActivityScheduler.getInstance().getResults(device);
-			if (seenResults.add(deviceResults)) {
-				if (results == null) {
-					results = deviceResults;
-				} else if (deviceResults != null) {
-					results = results.cross(deviceResults);
-				}
+			if (!devicesForResults.containsKey(deviceResults))
+				devicesForResults.put(deviceResults, new HashSet<>());
+			devicesForResults.get(deviceResults).add(device);
+		}
+
+		for (ActivityResults deviceResults : devicesForResults.keySet()) {
+			if (results == null && deviceResults != null) {
+				results = deviceResults.withMetadataFor(devicesForResults.get(deviceResults));
+			} else if (deviceResults != null) {
+				results = results.cross(deviceResults.withMetadataFor(devicesForResults.get(deviceResults)));
 			}
 		}
 

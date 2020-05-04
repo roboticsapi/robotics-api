@@ -7,8 +7,10 @@
 
 package org.roboticsapi.core.activity;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
+import org.roboticsapi.core.Device;
 import org.roboticsapi.core.exception.RoboticsException;
 
 public interface ActivityResults {
@@ -22,5 +24,7 @@ public interface ActivityResults {
 	ActivityResults union(ActivityResults other);
 
 	ActivityResults without(ActivityResult result);
+
+	ActivityResults withMetadataFor(Set<Device> list);
 
 }
