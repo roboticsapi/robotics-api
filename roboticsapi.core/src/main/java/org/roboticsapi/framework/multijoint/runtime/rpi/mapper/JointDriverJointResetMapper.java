@@ -13,6 +13,10 @@ import org.roboticsapi.core.actuator.ConcurrentAccessException;
 import org.roboticsapi.core.realtimevalue.realtimeboolean.RealtimeBoolean;
 import org.roboticsapi.core.realtimevalue.realtimedouble.RealtimeDouble;
 import org.roboticsapi.facet.runtime.rpi.RpiException;
+import org.roboticsapi.facet.runtime.rpi.core.primitives.BooleanIsNull;
+import org.roboticsapi.facet.runtime.rpi.core.primitives.BooleanNot;
+import org.roboticsapi.facet.runtime.rpi.core.primitives.BooleanPre;
+import org.roboticsapi.facet.runtime.rpi.core.primitives.BooleanValue;
 import org.roboticsapi.facet.runtime.rpi.mapping.ActuatorDriverMapper;
 import org.roboticsapi.facet.runtime.rpi.mapping.ActuatorFragment;
 import org.roboticsapi.facet.runtime.rpi.mapping.IndexedActuatorDriver;
@@ -35,8 +39,18 @@ public class JointDriverJointResetMapper
 
 		JointPosition jointPosition = new JointPosition(actuatorDriver.getRpiDeviceName(), actuatorDriver.getIndex());
 
-		ActuatorFragment ret = new ActuatorFragment(actuatorDriver, RealtimeBoolean.TRUE, jointPosition);
-
+		// Fix for forcing joint velocity to 0
+		// Apply position for two cycles
+		BooleanValue value = new BooleanValue(true);
+		BooleanPre pre = new BooleanPre();
+		BooleanIsNull isNull = new BooleanIsNull();
+		BooleanNot not = new BooleanNot();
+		
+		ActuatorFragment ret = new ActuatorFragment(actuatorDriver, not.getOutValue(), jointPosition, value, pre, isNull, not);
+		ret.connect(value.getOutValue(), pre.getInValue());
+		ret.connect(pre.getOutValue(), isNull.getInValue());
+		ret.connect(isNull.getOutValue(), not.getInValue());
+		
 		ret.addDependency(actionResult.getPosition(), "inPosition", jointPosition.getInPosition());
 
 		ret.addException(ConcurrentAccessException.class, jointPosition.getOutErrorConcurrentAccess(),
