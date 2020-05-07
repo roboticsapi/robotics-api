@@ -35,13 +35,17 @@ public class ActivityScheduler {
 	}
 
 	public void cancel(Actuator device) throws RoboticsException {
-		if (handles.containsKey(device))
-			handles.get(device).cancelExecute();
+		ActivityHandle h = handles.get(device);
+		if (h != null) {
+			h.cancelExecute();
+		}
 	}
 
 	public void endExecute(Actuator device) throws RoboticsException {
-		if (handles.containsKey(device))
-			handles.get(device).endExecute();
+		ActivityHandle h = handles.get(device);
+		if (h != null) {
+			h.endExecute();
+		}
 	}
 
 }
